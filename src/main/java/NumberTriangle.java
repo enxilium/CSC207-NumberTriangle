@@ -1,4 +1,5 @@
 import java.io.*;
+import java.lang.*;
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -88,8 +89,17 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
-        return -1;
+        if (path.isEmpty()) {
+            return this.root;
+        }
+
+        String newPath = path.substring(1);
+
+        if (path.charAt(0) == 'l') {
+            return this.left.retrieve(newPath);
+        } else {
+            return this.right.retrieve(newPath);
+        }
     }
 
     /** Read in the NumberTriangle structure from a file.
@@ -110,21 +120,42 @@ public class NumberTriangle {
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
 
-        // TODO define any variables that you want to use to store things
-
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
         NumberTriangle top = null;
+        NumberTriangle[] prevLine = null;
 
         String line = br.readLine();
         while (line != null) {
-
-            // remove when done; this line is included so running starter code prints the contents of the file
+            // TODO: remove when done; this line is included so running starter code prints the contents of the file
             System.out.println(line);
 
-            // TODO process the line
+            String[] nodes = line.split(" ");
 
-            //read the next line
+            NumberTriangle[] currLine = new NumberTriangle[nodes.length];
+
+            for (int i = 0; i < nodes.length; i++) {
+                int val = Integer.parseInt(nodes[i]);
+
+                currLine[i] = new NumberTriangle(val);
+
+                if (top == null) {
+                    top = currLine[i]; // Must be the first node
+                    break;
+                }
+
+                // Every other line will have a previous line
+                if (i > 0) {
+                    prevLine[i - 1].setRight(currLine[i]);
+                }
+
+                if (i < nodes.length - 1) {
+                    prevLine[i].setLeft(currLine[i]);
+                }
+            }
+
+            prevLine = currLine;
+
             line = br.readLine();
         }
         br.close();
