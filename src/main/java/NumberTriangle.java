@@ -114,22 +114,15 @@ public class NumberTriangle {
      * @throws IOException may naturally occur if an issue reading the file occurs
      */
     public static NumberTriangle loadTriangle(String fname) throws IOException {
-        // open the file and get a BufferedReader object whose methods
-        // are more convenient to work with when reading the file contents.
         InputStream inputStream = NumberTriangle.class.getClassLoader().getResourceAsStream(fname);
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
 
-        // will need to return the top of the NumberTriangle,
-        // so might want a variable for that.
         NumberTriangle top = null;
         NumberTriangle[] prevLine = null;
 
         String line = br.readLine();
         while (line != null) {
-            // TODO: remove when done; this line is included so running starter code prints the contents of the file
-            System.out.println(line);
-
             String[] nodes = line.split(" ");
 
             NumberTriangle[] currLine = new NumberTriangle[nodes.length];
@@ -140,11 +133,10 @@ public class NumberTriangle {
                 currLine[i] = new NumberTriangle(val);
 
                 if (top == null) {
-                    top = currLine[i]; // Must be the first node
+                    top = currLine[i];
                     break;
                 }
 
-                // Every other line will have a previous line
                 if (i > 0) {
                     prevLine[i - 1].setRight(currLine[i]);
                 }
